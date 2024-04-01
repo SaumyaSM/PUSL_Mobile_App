@@ -135,7 +135,7 @@ class _SignUpState extends State<SignUp> {
                               controller: emailController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter name";
+                                  return "Please enter email";
                                 }
                                 return null;
                               },
@@ -151,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                               controller: passwordController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter name";
+                                  return "Please enter password";
                                 }
                                 return null;
                               },

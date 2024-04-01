@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mad_app/pages/SignUp.dart';
 import 'package:mad_app/pages/bottomnav.dart';
+import 'package:mad_app/pages/forgotpassword.dart';
 import 'package:mad_app/pages/home.dart';
 import 'package:mad_app/pages/login.dart';
 import 'package:mad_app/pages/onboard.dart';
@@ -17,7 +18,7 @@ class BusinessApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      home: SignUp(),
+      home: ForgotPassword(),
     );
   }
 }
