@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mad_app/pages/bottomnav.dart';
 import 'package:mad_app/pages/login.dart';
+import 'package:mad_app/services/database.dart';
+import 'package:mad_app/services/shared_pref.dart';
 import 'package:mad_app/widget/widget_support.dart';
+import 'package:random_string/random_string.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -31,6 +34,21 @@ class _SignUpState extends State<SignUp> {
               "Registered Successfully",
               style: TextStyle(fontSize: 20.0),
             ))));
+
+        String Id = randomAlphaNumeric(10);
+        Map<String, dynamic> addUserInfo = {
+          "Name": nameController.text,
+          "Email": emailController.text,
+          "Wallet": "0",
+          "ID": Id,
+        };
+
+        await DatabaseMethods().addUserDetail(addUserInfo, Id);
+        await SharedPreferenceHelper().saveUserName(nameController.text);
+        await SharedPreferenceHelper().saveUserEmail(nameController.text);
+        await SharedPreferenceHelper().saveUserWallet('0');
+        await SharedPreferenceHelper().saveUserId(Id);
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => BottomNav()));
       } on FirebaseException catch (e) {
