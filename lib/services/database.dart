@@ -10,8 +10,8 @@ class DatabaseMethods {
 
   UpdateUserWallet(String id, String amount) async {
     return await FirebaseFirestore.instance
-        .collection("users")
+        .collection('users')
         .doc(id)
-        .update({"wallet": amount});
+        .update({"Wallet": amount});
   }
 }

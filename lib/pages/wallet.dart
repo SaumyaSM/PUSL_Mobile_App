@@ -20,6 +20,7 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
   String? wallet, id;
   int? add;
+  TextEditingController amountcontroller = TextEditingController();
   getthesharedpref() async {
     wallet = await SharedPreferenceHelper().getUserWallet();
     id = await SharedPreferenceHelper().getUserId();
@@ -182,20 +183,25 @@ class _WalletState extends State<Wallet> {
                   SizedBox(
                     height: 50.0,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    padding: EdgeInsets.symmetric(vertical: 12.0),
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Center(
-                      child: Text(
-                        "Add Money",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      openEdit();
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: Center(
+                        child: Text(
+                          "Add Money",
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   )
@@ -232,6 +238,7 @@ class _WalletState extends State<Wallet> {
             context: context,
             builder: (_) => AlertDialog(
                   content: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
                         children: [
@@ -288,4 +295,84 @@ class _WalletState extends State<Wallet> {
     final calculatedamount = (int.parse(amount) * 100);
     return calculatedamount.toString();
   }
+
+  Future openEdit() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            content: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 50.0,
+                        ),
+                        Center(
+                          child: Text(
+                            "Add Money",
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextField(
+                        controller: amountcontroller,
+                        decoration: InputDecoration(
+                            border: InputBorder.none, hintText: 'Enter Amount'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          makePayment(amountcontroller.text);
+                        },
+                        child: Container(
+                          width: 100,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              "Pay",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ));
 }
