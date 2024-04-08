@@ -19,6 +19,7 @@ class _LoginState extends State<Login> {
   String email = "", password = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   final _formkey = GlobalKey<FormState>();
   userLogin() async {
@@ -136,11 +137,24 @@ class _LoginState extends State<Login> {
                                 }
                                 return null;
                               },
-                              obscureText: true,
+                              obscureText: _obscureText,
                               decoration: InputDecoration(
-                                  hintText: 'Password',
-                                  hintStyle: AppWidget.HintTextFieldStyle(),
-                                  prefixIcon: Icon(Icons.password_outlined)),
+                                hintText: 'Password',
+                                hintStyle: AppWidget.HintTextFieldStyle(),
+                                prefixIcon: Icon(Icons.password),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _obscureText = !_obscureText;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 20.0,
