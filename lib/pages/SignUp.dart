@@ -120,10 +120,8 @@ class _SignUpState extends State<SignUp> {
                       child: Form(
                         key: _formkey,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: 20.0,
-                            ),
                             Center(
                               child: Text(
                                 "Sign Up",
@@ -180,7 +178,7 @@ class _SignUpState extends State<SignUp> {
                                   prefixIcon: Icon(Icons.password_outlined)),
                             ),
                             SizedBox(
-                              height: 75.0,
+                              height: 60.0,
                             ),
                             GestureDetector(
                               onTap: () async {

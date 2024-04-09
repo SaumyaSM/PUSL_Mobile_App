@@ -100,10 +100,8 @@ class _LoginState extends State<Login> {
                       child: Form(
                         key: _formkey,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: 30.0,
-                            ),
                             Center(
                               child: Text(
                                 "Login",
@@ -111,7 +109,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             SizedBox(
-                              height: 50.0,
+                              height: 30.0,
                             ),
                             TextFormField(
                               controller: emailController,
@@ -180,7 +178,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             SizedBox(
-                              height: 75.0,
+                              height: 60.0,
                             ),
                             GestureDetector(
                               onTap: () async {

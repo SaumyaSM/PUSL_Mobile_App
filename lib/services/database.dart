@@ -14,4 +14,10 @@ class DatabaseMethods {
         .doc(id)
         .update({"Wallet": amount});
   }
+
+  Future addFoodItem(Map<String, dynamic> userInfoMap, String id) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .add(userInfoMap);
+  }
 }
