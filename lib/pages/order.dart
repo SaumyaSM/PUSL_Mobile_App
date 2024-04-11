@@ -155,7 +155,7 @@ class _OrderState extends State<Order> {
                                       style: AppWidget.SemiboldTextFieldStyle(),
                                     ),
                                     Text(
-                                      "\$" + ds["Total"],
+                                      "LKR " + ds["Total"],
                                       style: AppWidget.SemiboldTextFieldStyle(),
                                     )
                                   ],
