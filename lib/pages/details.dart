@@ -184,7 +184,8 @@ class _DetailsState extends State<Details> {
                         "Name": widget.name,
                         "Quantity": a.toString(),
                         "Total": total.toString(),
-                        "Image": widget.image
+                        "Image": widget.image,
+                        "Price": widget.price,
                       };
                       await DatabaseMethods().addFoodToCart(addFoodtoCart, id!);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
