@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mad_app/pages/details.dart';
+import 'package:mad_app/services/database.dart';
 import 'package:mad_app/widget/widget_support.dart';
 
 class Home extends StatefulWidget {
@@ -13,7 +15,194 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool pizza = false, burger = false, grill = false, icecream = false;
+
+  Stream? fooditemStream;
+
+  ontheload() async {
+    fooditemStream = await DatabaseMethods().getFooItem("Pizza");
+    setState(() {});
+  }
+
   @override
+  void initState() {
+    ontheload();
+    super.initState();
+  }
+
+  Widget allItemsVertical() {
+    return StreamBuilder(
+        stream: fooditemStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? Flexible(
+                  child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: snapshot.data.docs.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data.docs[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Details(
+                                          detail: ds["Detail"],
+                                          name: ds["Name"],
+                                          price: ds["Price"],
+                                          image: ds["Image"],
+                                        )));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20.0, bottom: 20.0),
+                            child: Material(
+                              elevation: 5.0,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        ds["Image"],
+                                        height: 125,
+                                        width: 125,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          child: Text(
+                                            ds["Name"],
+                                            style: AppWidget
+                                                .SemiboldTextFieldStyle(),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          child: Text(
+                                            ds["Detail"],
+                                            style:
+                                                AppWidget.LightTextFieldStyle(),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          child: Text(
+                                            "LKR " + ds["Price"],
+                                            style: AppWidget
+                                                .SemiboldTextFieldStyle(),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              : CircularProgressIndicator();
+        });
+  }
+
+  Widget allItems() {
+    return StreamBuilder(
+        stream: fooditemStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: snapshot.data.docs.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot ds = snapshot.data.docs[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Details(
+                                      detail: ds["Detail"],
+                                      name: ds["Name"],
+                                      price: ds["Price"],
+                                      image: ds["Image"],
+                                    )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(4),
+                        child: Material(
+                          elevation: 5.0,
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    ds["Image"],
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  ds["Name"],
+                                  style: AppWidget.SemiboldTextFieldStyle(),
+                                ),
+                                Text(
+                                  ds["Detail"],
+                                  style: AppWidget.LightTextFieldStyle(),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "LKR " + ds["Price"],
+                                  style: AppWidget.SemiboldTextFieldStyle(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+              : CircularProgressIndicator();
+        });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -59,313 +248,14 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 20.0,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Details()));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(4),
-                      child: Material(
-                        elevation: 5.0,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "images/pasta2.png",
-                                height: 150,
-                                width: 150,
-                                fit: BoxFit.cover,
-                              ),
-                              Text(
-                                "Cheesy Pasta Plate",
-                                style: AppWidget.SemiboldTextFieldStyle(),
-                              ),
-                              Text(
-                                "Fiery pasta delight!",
-                                style: AppWidget.LightTextFieldStyle(),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "LKR 1250",
-                                style: AppWidget.SemiboldTextFieldStyle(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(4),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "images/pasta.png",
-                              height: 150,
-                              width: 150,
-                              fit: BoxFit.cover,
-                            ),
-                            Text(
-                              "Spicy Pasta Plate",
-                              style: AppWidget.SemiboldTextFieldStyle(),
-                            ),
-                            Text(
-                              "Fiery pasta delight!",
-                              style: AppWidget.LightTextFieldStyle(),
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              "LKR 1250",
-                              style: AppWidget.SemiboldTextFieldStyle(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(4),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "images/pasta.png",
-                              height: 150,
-                              width: 150,
-                              fit: BoxFit.cover,
-                            ),
-                            Text(
-                              "Spicy Pasta Plate",
-                              style: AppWidget.SemiboldTextFieldStyle(),
-                            ),
-                            Text(
-                              "Fiery pasta delight!",
-                              style: AppWidget.LightTextFieldStyle(),
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              "LKR 1250",
-                              style: AppWidget.SemiboldTextFieldStyle(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            Container(
+              height: 270,
+              child: allItems(),
             ),
             SizedBox(
               height: 20.0,
             ),
-            Flexible(
-              child: ListView(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 20.0),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'images/pasta.png',
-                              height: 125,
-                              width: 125,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "Italian recipe spicy pasta",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "With mozzarella cheese",
-                                    style: AppWidget.LightTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "LKR 1500",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.0),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'images/pasta.png',
-                              height: 125,
-                              width: 125,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "Italian recipe spicy pasta",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "With mozzarella cheese",
-                                    style: AppWidget.LightTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "LKR 1500",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 20.0),
-                    child: Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'images/pasta.png',
-                              height: 125,
-                              width: 125,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "Italian recipe spicy pasta",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "With mozzarella cheese",
-                                    style: AppWidget.LightTextFieldStyle(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    "LKR 1500",
-                                    style: AppWidget.SemiboldTextFieldStyle(),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Container(child: allItemsVertical()),
           ],
         ),
       ),
@@ -377,11 +267,12 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             pizza = true;
             burger = false;
             grill = false;
             icecream = false;
+            fooditemStream = await DatabaseMethods().getFooItem("Pizza");
             setState(() {});
           },
           child: Material(
@@ -401,11 +292,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             pizza = false;
             burger = true;
             grill = false;
             icecream = false;
+            fooditemStream = await DatabaseMethods().getFooItem("Burger");
             setState(() {});
           },
           child: Material(
@@ -425,11 +317,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             pizza = false;
             burger = false;
             grill = true;
             icecream = false;
+            fooditemStream = await DatabaseMethods().getFooItem("Grill");
             setState(() {});
           },
           child: Material(
@@ -449,11 +342,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             pizza = false;
             burger = false;
             grill = false;
             icecream = true;
+            fooditemStream = await DatabaseMethods().getFooItem("Ice Cream");
             setState(() {});
           },
           child: Material(

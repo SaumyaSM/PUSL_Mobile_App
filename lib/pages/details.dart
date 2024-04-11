@@ -3,16 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mad_app/widget/widget_support.dart';
 
+import '../services/database.dart';
+import '../services/shared_pref.dart';
+
 class Details extends StatefulWidget {
-  const Details({super.key});
+  String image, name, detail, price;
+  Details(
+      {required this.detail,
+      required this.image,
+      required this.name,
+      required this.price});
 
   @override
   State<Details> createState() => _DetailsState();
 }
 
 class _DetailsState extends State<Details> {
-  int a = 1;
+  int a = 1, total = 0;
+  String? id;
+
+  getthesharedpref() async {
+    id = await SharedPreferenceHelper().getUserId();
+    setState(() {});
+  }
+
+  ontheload() async {
+    await getthesharedpref();
+    setState(() {});
+  }
+
   @override
+  void initState() {
+    super.initState();
+    ontheload();
+    total = int.parse(widget.price);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -29,8 +55,8 @@ class _DetailsState extends State<Details> {
                 color: Colors.black,
               ),
             ),
-            Image.asset(
-              "images/pasta2.png",
+            Image.network(
+              widget.image,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 2.5,
               fit: BoxFit.fill,
@@ -44,13 +70,13 @@ class _DetailsState extends State<Details> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Italian",
+                      widget.name,
                       style: AppWidget.SemiboldTextFieldStyle(),
                     ),
-                    Text(
-                      "Cheesy pasta",
-                      style: AppWidget.boldTextFieldStyle(),
-                    ),
+                    // Text(
+                    //   widget.detail,
+                    //   style: AppWidget.boldTextFieldStyle(),
+                    // ),
                   ],
                 ),
                 Spacer(),
@@ -58,6 +84,7 @@ class _DetailsState extends State<Details> {
                   onTap: () {
                     if (a > 1) {
                       a--;
+                      total = total - int.parse(widget.price);
                     }
                     setState(() {});
                   },
@@ -84,6 +111,7 @@ class _DetailsState extends State<Details> {
                 GestureDetector(
                   onTap: () {
                     a++;
+                    total = total + int.parse(widget.price);
                     setState(() {});
                   },
                   child: Container(
@@ -102,12 +130,7 @@ class _DetailsState extends State<Details> {
               height: 20.0,
             ),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit,"
-              " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-              " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-              "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-              "Excepteur sint occaecat cupidatat non proident,"
-              " sunt in culpa qui officia deserunt mollit anim id est laborum.",
+              widget.detail,
               maxLines: 3,
               style: AppWidget.LightTextFieldStyle(),
             ),
@@ -150,44 +173,61 @@ class _DetailsState extends State<Details> {
                         style: AppWidget.SemiboldTextFieldStyle(),
                       ),
                       Text(
-                        "LKR 1500",
+                        "LKR " + total.toString(),
                         style: AppWidget.boldTextFieldStyle(),
                       )
                     ],
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Add to cart",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 50.0,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.white,
+                  GestureDetector(
+                    onTap: () async {
+                      Map<String, dynamic> addFoodtoCart = {
+                        "Name": widget.name,
+                        "Quantity": a.toString(),
+                        "Total": total.toString(),
+                        "Image": widget.image
+                      };
+                      await DatabaseMethods().addFoodToCart(addFoodtoCart, id!);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.orangeAccent,
+                          content: Text(
+                            "Food Added to Cart",
+                            style: TextStyle(fontSize: 18.0),
+                          )));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.1,
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Add to cart",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                      ],
+                          SizedBox(
+                            width: 50.0,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],

@@ -10,6 +10,7 @@ import 'package:mad_app/pages/forgotpassword.dart';
 import 'package:mad_app/pages/home.dart';
 import 'package:mad_app/pages/login.dart';
 import 'package:mad_app/pages/onboard.dart';
+import 'package:mad_app/pages/order.dart';
 import 'package:mad_app/pages/wallet.dart';
 import 'package:mad_app/widget/app_constant.dart';
 
@@ -25,7 +26,7 @@ class BusinessApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      home: AddFood(),
+      home: BottomNav(),
     );
   }
 }
