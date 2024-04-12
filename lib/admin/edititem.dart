@@ -75,18 +75,26 @@ class _EditItemPageState extends State<EditItemPage> {
             Image.network(widget.image),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                // Update item in the database
-                String name = _nameController.text;
-                String detail = _detailController.text;
-                String price = _priceController.text;
+              onPressed: () async {
+                if (id != null) {
+                  try {
+                    // Update item in the database
+                    String name = _nameController.text;
+                    String detail = _detailController.text;
+                    String price = _priceController.text;
 
-                DatabaseMethods().updateFoodItem(id!, "Name", name);
-                DatabaseMethods().updateFoodItem(id!, "Detail", detail);
-                DatabaseMethods().updateFoodItem(id!, "Price", price);
+                    await DatabaseMethods().updateFoodItem(id!, "Name", name);
+                    await DatabaseMethods()
+                        .updateFoodItem(id!, "Detail", detail);
+                    await DatabaseMethods().updateFoodItem(id!, "Price", price);
 
-                // Navigate back to the previous page
-                Navigator.pop(context);
+                    // Navigate back to the previous page
+                    Navigator.pop(context);
+                  } catch (e) {
+                    print('Error updating item: $e');
+                    // Handle error updating item
+                  }
+                }
               },
               child: Text('Save'),
             ),

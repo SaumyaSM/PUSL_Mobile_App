@@ -26,10 +26,7 @@ class DatabaseMethods {
   Future<void> updateFoodItem(String id, String field, dynamic value) async {
     try {
       // Update the document with the specified ID
-      await FirebaseFirestore.instance
-          .collection('your_collection')
-          .doc(id)
-          .update({
+      await FirebaseFirestore.instance.collection('users').doc(id).update({
         field: value,
       });
     } catch (e) {

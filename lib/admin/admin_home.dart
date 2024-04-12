@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mad_app/admin/add_food.dart';
+import 'package:mad_app/admin/admin_login.dart';
 import 'package:mad_app/admin/edit_food.dart';
 import 'package:mad_app/widget/widget_support.dart';
 
@@ -18,11 +19,22 @@ class _AdminHomeState extends State<AdminHome> {
         margin: EdgeInsets.only(left: 20, top: 70, right: 20),
         child: Column(
           children: [
-            Center(
-                child: Text(
-              "Admin Home",
-              style: AppWidget.HeadLIneTextFieldStyle(),
-            )),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminLogin()));
+                  },
+                ),
+                Center(
+                    child: Text(
+                  "Admin Home",
+                  style: AppWidget.HeadLIneTextFieldStyle(),
+                )),
+              ],
+            ),
             SizedBox(
               height: 50,
             ),

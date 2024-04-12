@@ -26,6 +26,6 @@ class BusinessApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(home: Login());
+    return MaterialApp(home: Onboard());
   }
 }
