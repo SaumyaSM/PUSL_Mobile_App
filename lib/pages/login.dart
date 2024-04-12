@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mad_app/admin/admin_login.dart';
 import 'package:mad_app/pages/SignUp.dart';
 import 'package:mad_app/pages/forgotpassword.dart';
 import 'package:mad_app/widget/widget_support.dart';
@@ -227,6 +228,25 @@ class _LoginState extends State<Login> {
                     },
                     child: Text(
                       "Don't have an account? Sign Up",
+                      style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 17.0,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminLogin()));
+                    },
+                    child: Text(
+                      "Log as Admin",
                       style: TextStyle(
                           color: Colors.indigo,
                           fontSize: 17.0,

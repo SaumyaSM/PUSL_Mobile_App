@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
   Stream? fooditemStream;
 
   ontheload() async {
-    fooditemStream = await DatabaseMethods().getFooItem("Pizza");
+    fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
     setState(() {});
   }
 
@@ -272,7 +272,7 @@ class _HomeState extends State<Home> {
             burger = false;
             grill = false;
             icecream = false;
-            fooditemStream = await DatabaseMethods().getFooItem("Pizza");
+            fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
             setState(() {});
           },
           child: Material(
@@ -297,7 +297,7 @@ class _HomeState extends State<Home> {
             burger = true;
             grill = false;
             icecream = false;
-            fooditemStream = await DatabaseMethods().getFooItem("Burger");
+            fooditemStream = await DatabaseMethods().getFoodItem("Burger");
             setState(() {});
           },
           child: Material(
@@ -322,7 +322,7 @@ class _HomeState extends State<Home> {
             burger = false;
             grill = true;
             icecream = false;
-            fooditemStream = await DatabaseMethods().getFooItem("Grill");
+            fooditemStream = await DatabaseMethods().getFoodItem("Grill");
             setState(() {});
           },
           child: Material(
@@ -347,7 +347,7 @@ class _HomeState extends State<Home> {
             burger = false;
             grill = false;
             icecream = true;
-            fooditemStream = await DatabaseMethods().getFooItem("Ice Cream");
+            fooditemStream = await DatabaseMethods().getFoodItem("Ice Cream");
             setState(() {});
           },
           child: Material(

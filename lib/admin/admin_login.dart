@@ -39,6 +39,15 @@ class _AdminLoginState extends State<AdminLogin> {
                       topRight: Radius.circular(70))),
             ),
             Container(
+              margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 40.0),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Container(
               margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 100.0),
               child: Form(
                   key: _formkey,

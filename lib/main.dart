@@ -4,6 +4,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mad_app/admin/add_food.dart';
 import 'package:mad_app/admin/admin_home.dart';
 import 'package:mad_app/admin/admin_login.dart';
+import 'package:mad_app/admin/edit_food.dart';
 import 'package:mad_app/pages/SignUp.dart';
 import 'package:mad_app/pages/bottomnav.dart';
 import 'package:mad_app/pages/forgotpassword.dart';
@@ -25,8 +26,6 @@ class BusinessApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(
-      home: BottomNav(),
-    );
+    return MaterialApp(home: Login());
   }
 }

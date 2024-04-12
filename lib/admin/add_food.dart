@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mad_app/services/shared_pref.dart';
 import 'package:mad_app/widget/widget_support.dart';
 import 'package:random_string/random_string.dart';
 
@@ -55,6 +56,7 @@ class _AddFoodState extends State<AddFood> {
         "Detail": detailController.text
       };
       await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
+        SharedPreferenceHelper().saveFoodId(addId.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.orangeAccent,
             content: Text(
